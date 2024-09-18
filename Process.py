@@ -1,13 +1,15 @@
-import random
-from time import sleep
+from threading import Lock, Thread
 from typing import Callable
+from time import sleep
+import random
+#from geeteventbus.subscriber import subscriber
+#from geeteventbus.eventbus import eventbus
+#from geeteventbus.event import event
 
+#from EventBus import EventBus
+from Bidule import *
+from Com import Com
 from pyeventbus3.pyeventbus3 import *
-
-from Message import Message, MessageTo
-from Token import Token, TokenState
-from SyncingMessage import SyncingMessage
-from BroadcastMessage import BroadcastMessage
 
 def mod(x: int, y: int) -> int:
     return ((x % y) + y) % y
@@ -23,12 +25,16 @@ class Process(Thread):
         self.myId = Process.nbProcessCreated
         Process.nbProcessCreated += 1
         self.name = name
+        self.numero = -1
 
         PyBus.Instance().register(self, self)
 
         self.alive = True
-        self.horloge = 0
+        self.lamport_clock = 0
         self.token_state = TokenState.Null
+        
+        self.com = Com(0,self)
+        
         self.nbSync = 0
         self.isSyncing = False
         self.start()
@@ -36,44 +42,48 @@ class Process(Thread):
     def run(self):
         while self.nbProcess != Process.nbProcessCreated:
             pass
-        if self.myId == 0:
-            self.releaseToken()
-        self.synchronize()
+
         loop = 0
         while self.alive:
+
             sleep(1)
-            print(f"{self.name} Loop: {loop} with Lamport clock: {self.horloge}")
+            print(f"{self.name} Loop: {loop} with Lamport clock: {self.com.clock}")
 
-            # if self.name == "P1":
-            #     self.sendTo("P2", "ga")
-            #     self.doCriticalAction(self.criticalActionWarning, ["ploi"])
-            # if self.name == "P2":
-            self.broadcast("P2 broadcast")
-            # if self.name == "P3":
-            #     receiver = str(random.randint(0, self.nbProcess - 1))
-            #     self.sendTo("P" + receiver, "j'envoi sms" + receiver)
+            self.broadcast2(loop)
+
             loop += 1
-        sleep(1)
+        
+        print(self.getName() + " stopped")
+        
+    def broadcast2(self, loop):
+        # Broadcast test
+        if loop == 2 and self.numero == 0:
+            self.com.broadcast("bonjour")
 
+        if loop == 4:
+            if len(self.com.mailbox) > 0:
+                print(self.com.getFirstMessage().payload)
+    
     def stop(self):
         self.alive = False
+        self.com.stop()
         self.join()
 
-    def sendMessage(self, message: Message):
-        self.horloge += 1
-        message.horloge = self.horloge
-        print(f"{self.name} sends message: {message} with Lamport clock: {self.horloge}")
+    def sendMessage(self, message: Bidule):
+        self.lamport_clock += 1
+        message.lamport_clock = self.lamport_clock
+        print(f"{self.name} sends message: {message.getMachin()} with Lamport clock: {self.lamport_clock}")
         PyBus.Instance().post(message)
 
-    def receiveMessage(self, message: Message):
-        self.horloge = max(self.horloge, message.horloge) + 1
-        print(f"{self.name} received message: {message} with updated Lamport clock: {self.horloge}")
+    def receiveMessage(self, message: Bidule):
+        self.lamport_clock = max(self.lamport_clock, message.lamport_clock) + 1
+        print(f"{self.name} received message: {message.getMachin()} with updated Lamport clock: {self.lamport_clock}")
 
     def sendAll(self, obj: any):
-        self.sendMessage(Message(obj))
+        self.sendMessage(Bidule(obj))
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=Message)
-    def process(self, event: Message):
+    @subscribe(threadMode=Mode.PARALLEL, onEvent=Bidule)
+    def process(self, event: Bidule):
         print(f"{self.name} processes event: {event}")
         self.receiveMessage(event)
 
@@ -83,7 +93,7 @@ class Process(Thread):
 
     @subscribe(threadMode=Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event: BroadcastMessage):
-        print(f"{self.name} received broadcast from {event.from_process}: {event}")
+        print(f"{self.name} received broadcast from {event.from_process}: {event.obj}")
         if event.from_process != self.name:
             self.receiveMessage(event)
 
@@ -104,7 +114,7 @@ class Process(Thread):
         token.from_process = self.myId
         token.to_process = mod(self.myId + 1, Process.nbProcessCreated)
         token.nbSync = self.nbSync
-        print(f"{self.name} releases token to {token.to_process} with Lamport clock: {self.horloge}")
+        print(f"{self.name} releases token to {token.to_process} with Lamport clock: {self.lamport_clock}")
         self.sendMessage(token)
         self.token_state = TokenState.Null
 
@@ -119,7 +129,7 @@ class Process(Thread):
 
     @subscribe(threadMode=Mode.PARALLEL, onEvent=Token)
     def onToken(self, event: Token):
-        print(f"{self.name} received token: {event}")
+        print(f"{self.name} received token from_process : {event.from_process} and to_process : {event.to_process} ")
         if event.to_process == self.myId:
             self.receiveMessage(event)
             if not self.alive:
@@ -142,7 +152,7 @@ class Process(Thread):
             self.releaseToken()
 
     def criticalActionWarning(self, msg: str):
-        print("[Critical Action], Token used by", self.name, " ---Message :", msg)
+        print("[Critical Action], Token used by", self.name, " ---Bidule :", msg)
 
     def synchronize(self):
         self.isSyncing = True
