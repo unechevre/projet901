@@ -5,7 +5,7 @@ class Bidule:
     
     def __init__(self, machin):
         self.machin = machin
-        self.lamport_clock = None
+        self.lamport_clock = 0
 
     def getMachin(self):
         return self.machin

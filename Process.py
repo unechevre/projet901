@@ -25,7 +25,7 @@ class Process(Thread):
         self.myId = Process.nbProcessCreated
         Process.nbProcessCreated += 1
         self.name = name
-        self.numero = -1
+        self.numero = Process.nbProcessCreated
 
         PyBus.Instance().register(self, self)
 
@@ -57,123 +57,119 @@ class Process(Thread):
         
     def broadcast2(self, loop):
         # Broadcast test
-        if loop == 2 and self.numero == 0:
+        if loop == 2 and self.numero == 1:
             self.com.broadcast("bonjour")
-
+        if loop == 3 and self.numero == 2:
+            self.com.broadcast("jaime lanus")
         if loop == 4:
             if len(self.com.mailbox) > 0:
-                print(self.com.getFirstMessage().payload)
+                print(self.com.getFirstMessage())
     
     def stop(self):
         self.alive = False
         self.com.stop()
         self.join()
 
-    def sendMessage(self, message: Bidule):
-        self.lamport_clock += 1
-        message.lamport_clock = self.lamport_clock
-        print(f"{self.name} sends message: {message.getMachin()} with Lamport clock: {self.lamport_clock}")
-        PyBus.Instance().post(message)
 
-    def receiveMessage(self, message: Bidule):
-        self.lamport_clock = max(self.lamport_clock, message.lamport_clock) + 1
-        print(f"{self.name} received message: {message.getMachin()} with updated Lamport clock: {self.lamport_clock}")
+    # def sendMessage(self, message: Bidule):
+    #     self.lamport_clock += 1
+    #     message.lamport_clock = self.lamport_clock
+    #     print(f"{self.name} sends message: {message.getMachin()} with Lamport clock: {self.lamport_clock}")
+    #     PyBus.Instance().post(message)
 
-    def sendAll(self, obj: any):
-        self.sendMessage(Bidule(obj))
+    # def receiveMessage(self, message: Bidule):
+    #     self.lamport_clock = max(self.lamport_clock, message.lamport_clock) + 1
+    #     print(f"{self.name} received message: {message.getMachin()} with updated Lamport clock: {self.lamport_clock}")
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=Bidule)
-    def process(self, event: Bidule):
-        print(f"{self.name} processes event: {event}")
-        self.receiveMessage(event)
+    # def sendAll(self, obj: any):
+    #     self.sendMessage(Bidule(obj))
 
-    def broadcast(self, obj: any):
-        print(f"{self.name} broadcasts: {obj}")
-        self.sendMessage(BroadcastMessage(obj, self.name))
+    # @subscribe(threadMode=Mode.PARALLEL, onEvent=Bidule)
+    # def process(self, event: Bidule):
+    #     print(f"{self.name} processes event: {event}")
+    #     self.receiveMessage(event)
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=BroadcastMessage)
-    def onBroadcast(self, event: BroadcastMessage):
-        print(f"{self.name} received broadcast from {event.from_process}: {event.obj}")
-        if event.from_process != self.name:
-            self.receiveMessage(event)
+    # def broadcast(self, obj: any):
+    #     print(f"{self.name} broadcasts: {obj}")
+    #     self.sendMessage(BroadcastMessage(obj, self.name))
 
-    def sendTo(self, dest: str, obj: any):
-        print(f"{self.name} sends to {dest}: {obj}")
-        self.sendMessage(MessageTo(obj, self.name, dest))
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=MessageTo)
-    def onReceive(self, event: MessageTo):
-        print(f"{self.name} received message to {event.to_process}: {event}")
-        if event.to_process == self.name:
-            self.receiveMessage(event)
 
-    def releaseToken(self):
-        if self.token_state == TokenState.SC:
-            self.token_state = TokenState.Release
-        token = Token()
-        token.from_process = self.myId
-        token.to_process = mod(self.myId + 1, Process.nbProcessCreated)
-        token.nbSync = self.nbSync
-        print(f"{self.name} releases token to {token.to_process} with Lamport clock: {self.lamport_clock}")
-        self.sendMessage(token)
-        self.token_state = TokenState.Null
+    # def sendTo(self, dest: str, obj: any):
+    #     print(f"{self.name} sends to {dest}: {obj}")
+    #     self.sendMessage(MessageTo(obj, self.name, dest))
 
-    def requestToken(self):
-        self.token_state = TokenState.Requested
-        print(f"{self.name} requests token")
-        while self.token_state == TokenState.Requested:
-            if not self.alive:
-                return
-        self.token_state = TokenState.SC
-        print(f"{self.name} acquired token")
+    # @subscribe(threadMode=Mode.PARALLEL, onEvent=MessageTo)
+    # def onReceive(self, event: MessageTo):
+    #     print(f"{self.name} received message to {event.to_process}: {event}")
+    #     if event.to_process == self.name:
+    #         self.receiveMessage(event)
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=Token)
-    def onToken(self, event: Token):
-        print(f"{self.name} received token from_process : {event.from_process} and to_process : {event.to_process} ")
-        if event.to_process == self.myId:
-            self.receiveMessage(event)
-            if not self.alive:
-                return
-            if self.token_state == TokenState.Requested:
-                self.token_state = TokenState.SC
-                return
-            if self.isSyncing:
-                self.isSyncing = False
-                self.nbSync = mod(event.nbSync + 1, Process.nbProcessCreated)
-                if self.nbSync == 0:
-                    self.sendMessage(SyncingMessage(self.myId))
-            self.releaseToken()
+    # def releaseToken(self):
+    #     if self.token_state == TokenState.SC:
+    #         self.token_state = TokenState.Release
+    #     token = Token()
+    #     token.from_process = self.myId
+    #     token.to_process = mod(self.myId + 1, Process.nbProcessCreated)
+    #     token.nbSync = self.nbSync
+    #     print(f"{self.name} releases token to {token.to_process} with Lamport clock: {self.lamport_clock}")
+    #     self.sendMessage(token)
+    #     self.token_state = TokenState.Null
 
-    def doCriticalAction(self, funcToCall: Callable, args: list):
-        self.requestToken()
-        if self.alive:
-            print(f"{self.name} performing critical action")
-            funcToCall(*args)
-            self.releaseToken()
+    # def requestToken(self):
+    #     self.token_state = TokenState.Requested
+    #     print(f"{self.name} requests token")
+    #     while self.token_state == TokenState.Requested:
+    #         if not self.alive:
+    #             return
+    #     self.token_state = TokenState.SC
+    #     print(f"{self.name} acquired token")
 
-    def criticalActionWarning(self, msg: str):
-        print("[Critical Action], Token used by", self.name, " ---Bidule :", msg)
+    # @subscribe(threadMode=Mode.PARALLEL, onEvent=Token)
+    # def onToken(self, event: Token):
+    #     print(f"{self.name} received token from_process : {event.from_process} and to_process : {event.to_process} ")
+    #     if event.to_process == self.myId:
+    #         self.receiveMessage(event)
+    #         if not self.alive:
+    #             return
+    #         if self.token_state == TokenState.Requested:
+    #             self.token_state = TokenState.SC
+    #             return
+    #         if self.isSyncing:
+    #             self.isSyncing = False
+    #             self.nbSync = mod(event.nbSync + 1, Process.nbProcessCreated)
+    #             if self.nbSync == 0:
+    #                 self.sendMessage(SyncingMessage(self.myId))
+    #         self.releaseToken()
 
-    def synchronize(self):
-        self.isSyncing = True
-        print(f"{self.name} starts synchronizing")
-        while self.isSyncing:
-            if not self.alive:
-                return
-        while self.nbSync != 0:
-            if not self.alive:
-                return
-        print(f"{self.name} finished synchronizing")
+    # def doCriticalAction(self, funcToCall: Callable, args: list):
+    #     self.requestToken()
+    #     if self.alive:
+    #         print(f"{self.name} performing critical action")
+    #         funcToCall(*args)
+    #         self.releaseToken()
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=SyncingMessage)
-    def onSyncing(self, event: SyncingMessage):
-        print(f"{self.name} received syncing message: {event}")
-        if event.from_process != self.myId:
-            self.receiveMessage(event)
-            self.nbSync = 0
+    # def criticalActionWarning(self, msg: str):
+    #     print("[Critical Action], Token used by", self.name, " ---Bidule :", msg)
 
-    def stop(self):
-        self.alive = False
+    # def synchronize(self):
+    #     self.isSyncing = True
+    #     print(f"{self.name} starts synchronizing")
+    #     while self.isSyncing:
+    #         if not self.alive:
+    #             return
+    #     while self.nbSync != 0:
+    #         if not self.alive:
+    #             return
+    #     print(f"{self.name} finished synchronizing")
+
+    # @subscribe(threadMode=Mode.PARALLEL, onEvent=SyncingMessage)
+    # def onSyncing(self, event: SyncingMessage):
+    #     print(f"{self.name} received syncing message: {event}")
+    #     if event.from_process != self.myId:
+    #         self.receiveMessage(event)
+    #         self.nbSync = 0
+
 
     def waitStopped(self):
         self.join()

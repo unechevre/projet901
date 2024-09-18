@@ -35,7 +35,6 @@ class Com(Thread):
         print(f"[Com-{self.process.name}] sends to {dest}: {obj} with Lamport clock: {self.clock}")
         PyBus.Instance().post(MessageTo(obj, self.process.name, dest))
 
-    @subscribe(threadMode=Mode.PARALLEL, onEvent=BroadcastMessage)
     def broadcast(self, obj: any):
         """Diffusion de l'objet à tous les processus"""
         self.inc_clock()
@@ -56,9 +55,16 @@ class Com(Thread):
                 self.inc_clock()
                 print(f"[Com-{self.process.name}] received broadcast from {event.from_process}: {event.obj}")
     
-    def get_message(self):
+    def getFirstMessage(self):
         """Récupération du message depuis la boîte aux lettres"""
         if self.mailbox:
             return self.mailbox.pop(0)
         return None
+    
+    @subscribe(threadMode=Mode.PARALLEL, onEvent=BroadcastMessage)
+    def onBroadcast(self, event: BroadcastMessage):
+         if event.from_process != self.process.name:
+                self.mailbox.append(event)
+                self.inc_clock()
+                print(f"[Com-{self.process.name}] received broadcast from {event.from_process}: {event.obj}")
 
