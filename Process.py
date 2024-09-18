@@ -49,7 +49,8 @@ class Process(Thread):
             sleep(1)
             print(f"{self.name} Loop: {loop} with Lamport clock: {self.com.clock}")
 
-            self.broadcast2(loop)
+
+            self.sendTo(loop, "P1")
 
             loop += 1
         
@@ -59,11 +60,19 @@ class Process(Thread):
         # Broadcast test
         if loop == 2 and self.numero == 1:
             self.com.broadcast("bonjour")
-        if loop == 3 and self.numero == 2:
-            self.com.broadcast("jaime lanus")
+
         if loop == 4:
             if len(self.com.mailbox) > 0:
                 print(self.com.getFirstMessage())
+                
+    def sendTo(self, loop, to):
+    # Send to test
+        if loop == 2 and self.numero == 1:
+            self.com.sendTo("bonjour", to)
+
+        if loop == 4 and self.numero == to:
+            if len(self.com.mailbox) > 0:
+                print(self.com.getFirstMessage().payload)
     
     def stop(self):
         self.alive = False

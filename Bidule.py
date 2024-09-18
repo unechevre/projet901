@@ -23,6 +23,7 @@ class MessageTo(Bidule):
         Bidule.__init__(self, obj)
         self.from_process = from_process
         self.to_process = to_process
+        self.obj = obj
 
 
 class Token(Bidule):
