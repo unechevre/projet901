@@ -23,9 +23,10 @@ class Process(Thread):
 
         self.nbProcess = nbProcess
         self.myId = Process.nbProcessCreated
+        self.numero = Process.nbProcessCreated
+
         Process.nbProcessCreated += 1
         self.name = name
-        self.numero = Process.nbProcessCreated
 
         PyBus.Instance().register(self, self)
 
@@ -34,7 +35,7 @@ class Process(Thread):
         self.token_state = TokenState.Null
         
         self.com = Com(0,self)
-        
+        self.in_critical_section = False
         self.nbSync = 0
         self.isSyncing = False
         self.start()
@@ -45,41 +46,86 @@ class Process(Thread):
 
         loop = 0
         while self.alive:
-
             sleep(1)
             print(f"{self.name} Loop: {loop} with Lamport clock: {self.com.clock}")
-
-
-            self.sendTo(loop, "P1")
-
+            # self.broadcast(loop)
+            # self.sendTo(loop, "P1")
+            self.tokenTest(loop)
             loop += 1
-        
+
         print(self.getName() + " stopped")
         
-    def broadcast2(self, loop):
-        # Broadcast test
-        if loop == 2 and self.numero == 1:
+    # Broadcast test
+    def broadcast(self, loop):
+        
+        if loop == 2 and self.numero == 0:
             self.com.broadcast("bonjour")
+            
+        if loop == 3 and self.numero == 1:
+            self.com.broadcast("bonsoir")
 
         if loop == 4:
             if len(self.com.mailbox) > 0:
-                print(self.com.getFirstMessage())
-                
+                message = self.com.get_FirstMessage()  # Utilisez get_message() à la place de getFirstMessage()
+                print(message.obj if message else "No message found")
+    
+    
     def sendTo(self, loop, to):
-    # Send to test
-        if loop == 2 and self.numero == 1:
+        # Send to test
+        
+        if loop == 2 and self.numero == 0:
             self.com.sendTo("bonjour", to)
 
         if loop == 4 and self.numero == to:
             if len(self.com.mailbox) > 0:
-                print(self.com.getFirstMessage().payload)
-    
+                print(self.com.get_FirstMessage())
+
+    def tokenTest(self, loop):
+        # Token to test
+         # Test de synchronisation et gestion des jetons pour la section critique.
+        if loop == 2:
+            print(f"{self.name} is about to synchronize.")
+            self.com.synchronize()  # Appel à la synchronisation
+            print(f"{self.name} passed synchronization.") 
+            
+        elif loop == 4:
+            print(f"{self.name} is requesting access to critical section.")
+            self.com.requestSC()  # Demande d'accès à la section critique
+            print(f"{self.name} has entered the critical section.")
+            
+            # Simule l'exécution dans la section critique pendant un temps aléatoire
+            sleep(random.uniform(2.0, 2.5))
+            
+            print(f"{self.name} is leaving the critical section.")
+            self.com.releaseSC()  # Libère la section critique et passe le jeton au suivant
+
+
     def stop(self):
         self.alive = False
-        self.com.stop()
-        self.join()
+        self.com.stop()  
+        self.join() 
+    
+    
+    def requestSC(self):
+        """Demande d'entrée en section critique"""
+        print(f"{self.name} is requesting to enter critical section")
+        if self.com.request_token():
+            self.enter_critical_section()
 
+    def enter_critical_section(self):
+        """Entrée en section critique"""
+        self.token_state = TokenState.SC
+        self.in_critical_section = True
+        print(f"{self.name} has entered the critical section")
 
+    def releaseSC(self):
+        """Libération de la section critique"""
+        print(f"{self.name} is releasing the critical section")
+        self.token_state = TokenState.Release
+        self.in_critical_section = False
+        self.com.release_token()
+
+    
     # def sendMessage(self, message: Bidule):
     #     self.lamport_clock += 1
     #     message.lamport_clock = self.lamport_clock
@@ -101,7 +147,6 @@ class Process(Thread):
     # def broadcast(self, obj: any):
     #     print(f"{self.name} broadcasts: {obj}")
     #     self.sendMessage(BroadcastMessage(obj, self.name))
-
 
 
     # def sendTo(self, dest: str, obj: any):
@@ -182,3 +227,6 @@ class Process(Thread):
 
     def waitStopped(self):
         self.join()
+    
+    def nbProcess():
+        return Process.nbProcessCreated
