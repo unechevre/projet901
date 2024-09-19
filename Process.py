@@ -48,9 +48,20 @@ class Process(Thread):
         while self.alive:
             sleep(1)
             print(f"{self.name} Loop: {loop} with Lamport clock: {self.com.clock}")
-            # self.broadcast(loop)
-            # self.sendTo(loop, "P1")
-            self.tokenTest(loop)
+        
+            # Test de la méthode broadcastSync
+            if loop == 2:
+                # Le processus 0 envoie un message synchronisé
+                if self.numero == 0:
+                    print(f"{self.name} is about to perform broadcastSync.")
+                    self.com.broadcastSync("Synchronous message to all", from_process=0)
+                    print(f"{self.name} has completed broadcastSync.")
+
+                # Les autres processus attendent de recevoir le message synchronisé
+                else:
+                    print(f"{self.name} is waiting for a synchronous broadcast message.")
+                    self.com.broadcastSync(None, from_process=0)  # Le message est ignoré pour les récepteurs
+
             loop += 1
 
         print(self.getName() + " stopped")
