@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module Com</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">Com</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cenzon%5Conedrive%5Cbureau%5Cmaster2%5Carchitecture%20distribuer%5Cprojet%5Cprojet901%5Ccom.py">c:\users\enzon\onedrive\bureau\master2\architecture distribuer\projet\projet901\com.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="gevent.html">gevent</a><br>
+<a href="multiprocessing.html">multiprocessing</a><br>
+</td><td class="multicolumn"><a href="os.html">os</a><br>
+<a href="random.html">random</a><br>
+</td><td class="multicolumn"><a href="sys.html">sys</a><br>
+<a href="threading.html">threading</a><br>
+</td><td class="multicolumn"><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="Com.html#Token">Token</a>
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="threading.html#Thread">threading.Thread</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="Com.html#Com">Com</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Com">class <strong>Com</strong></a>(<a href="threading.html#Thread">threading.Thread</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Com">Com</a>(clock,&nbsp;process)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Class&nbsp;managing&nbsp;communication&nbsp;between&nbsp;processes.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="Com.html#Com">Com</a></dd>
+<dd><a href="threading.html#Thread">threading.Thread</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Com-__init__"><strong>__init__</strong></a>(self, clock, process) -&gt; None</dt><dd><span class="code">Initializes&nbsp;a&nbsp;new&nbsp;communicator&nbsp;for&nbsp;a&nbsp;process.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;clock&nbsp;(int):&nbsp;Initial&nbsp;Lamport&nbsp;clock&nbsp;value.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;process&nbsp;(Process):&nbsp;Reference&nbsp;to&nbsp;the&nbsp;associated&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-broadcast"><strong>broadcast</strong></a>(self, obj: &lt;built-in function any&gt;)</dt><dd><span class="code">Broadcasts&nbsp;an&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;all&nbsp;processes.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;obj&nbsp;(any):&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;broadcast.</span></dd></dl>
+
+<dl><dt><a name="Com-broadcastSync"><strong>broadcastSync</strong></a>(self, obj: &lt;built-in function any&gt;, from_process: int)</dt><dd><span class="code">Synchronously&nbsp;broadcasts&nbsp;a&nbsp;message&nbsp;to&nbsp;all&nbsp;processes.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;obj&nbsp;(any):&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;broadcast.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from_process&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;the&nbsp;sending&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-check_for_conflicts"><strong>check_for_conflicts</strong></a>(self)</dt><dd><span class="code">Checks&nbsp;for&nbsp;conflicts&nbsp;after&nbsp;receiving&nbsp;numbers&nbsp;from&nbsp;other&nbsp;processes.</span></dd></dl>
+
+<dl><dt><a name="Com-getFirstMessage"><strong>getFirstMessage</strong></a>(self)</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;first&nbsp;message&nbsp;from&nbsp;the&nbsp;mailbox,&nbsp;if&nbsp;available.</span></dd></dl>
+
+<dl><dt><a name="Com-getLastMessage"><strong>getLastMessage</strong></a>(self)</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;last&nbsp;message&nbsp;from&nbsp;the&nbsp;mailbox,&nbsp;if&nbsp;available.</span></dd></dl>
+
+<dl><dt><a name="Com-inc_clock"><strong>inc_clock</strong></a>(self)</dt><dd><span class="code">Increments&nbsp;the&nbsp;Lamport&nbsp;clock&nbsp;and&nbsp;returns&nbsp;the&nbsp;updated&nbsp;value.</span></dd></dl>
+
+<dl><dt><a name="Com-numerotation"><strong>numerotation</strong></a>(self)</dt><dd><span class="code">Starts&nbsp;the&nbsp;process&nbsp;numbering&nbsp;procedure.</span></dd></dl>
+
+<dl><dt><a name="Com-onBroadcastReceive"><strong>onBroadcastReceive</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onBroadcastSync"><strong>onBroadcastSync</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onExist"><strong>onExist</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onMessageReceivedSync"><strong>onMessageReceivedSync</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onMessageTo"><strong>onMessageTo</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onMessageToSync"><strong>onMessageToSync</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onReceive"><strong>onReceive</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-onToken"><strong>onToken</strong></a> = wrapper(*args, **kwargs)<span class="grey"><span class="heading-text"> from pyeventbus3.pyeventbus3.subscribe.<locals>.real_decorator.<locals></span></span></dt></dl>
+
+<dl><dt><a name="Com-receiveFromSync"><strong>receiveFromSync</strong></a>(self, from_process: int)</dt><dd><span class="code">Waits&nbsp;to&nbsp;receive&nbsp;a&nbsp;synchronous&nbsp;message&nbsp;from&nbsp;a&nbsp;specific&nbsp;process.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from_process&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;the&nbsp;sending&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-regenerate_number"><strong>regenerate_number</strong></a>(self)</dt><dd><span class="code">Generates&nbsp;a&nbsp;new&nbsp;random&nbsp;number&nbsp;and&nbsp;broadcasts&nbsp;it&nbsp;to&nbsp;other&nbsp;processes.</span></dd></dl>
+
+<dl><dt><a name="Com-releaseSC"><strong>releaseSC</strong></a>(self)</dt><dd><span class="code">Releases&nbsp;the&nbsp;critical&nbsp;section&nbsp;and&nbsp;passes&nbsp;the&nbsp;token&nbsp;to&nbsp;the&nbsp;next&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-requestSC"><strong>requestSC</strong></a>(self)</dt><dd><span class="code">Requests&nbsp;access&nbsp;to&nbsp;the&nbsp;critical&nbsp;section&nbsp;and&nbsp;waits&nbsp;until&nbsp;the&nbsp;token&nbsp;is&nbsp;obtained.</span></dd></dl>
+
+<dl><dt><a name="Com-sendTo"><strong>sendTo</strong></a>(self, obj: &lt;built-in function any&gt;, dest: int)</dt><dd><span class="code">Sends&nbsp;an&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;a&nbsp;specific&nbsp;process.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;obj&nbsp;(any):&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;send.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dest&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;the&nbsp;destination&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-sendToSync"><strong>sendToSync</strong></a>(self, obj: &lt;built-in function any&gt;, dest: int)</dt><dd><span class="code">Sends&nbsp;a&nbsp;message&nbsp;synchronously&nbsp;to&nbsp;a&nbsp;specific&nbsp;process.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;obj&nbsp;(any):&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;to&nbsp;send.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dest&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;the&nbsp;destination&nbsp;process.</span></dd></dl>
+
+<dl><dt><a name="Com-sendToken"><strong>sendToken</strong></a>(self, token)</dt><dd><span class="code">Sends&nbsp;the&nbsp;token&nbsp;to&nbsp;the&nbsp;next&nbsp;process.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;token&nbsp;(<a href="#Token">Token</a>):&nbsp;The&nbsp;token&nbsp;to&nbsp;send.</span></dd></dl>
+
+<dl><dt><a name="Com-stop"><strong>stop</strong></a>(self)</dt><dd><span class="code">Stops&nbsp;the&nbsp;communicator&nbsp;and&nbsp;its&nbsp;associated&nbsp;thread.</span></dd></dl>
+
+<dl><dt><a name="Com-synchronize"><strong>synchronize</strong></a>(self)</dt><dd><span class="code">Synchronizes&nbsp;the&nbsp;process&nbsp;with&nbsp;all&nbsp;other&nbsp;processes.</span></dd></dl>
+
+<dl><dt><a name="Com-token_manager"><strong>token_manager</strong></a>(self)</dt><dd><span class="code">Manages&nbsp;the&nbsp;circulation&nbsp;of&nbsp;the&nbsp;token&nbsp;among&nbsp;processes.</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>confirmations_lock</strong> = &lt;unlocked _thread.lock object&gt;</dl>
+
+<dl><dt><strong>confirmations_received</strong> = 0</dl>
+
+<dl><dt><strong>sync_barrier</strong> = None</dl>
+
+<dl><dt><strong>sync_counter</strong> = 0</dl>
+
+<dl><dt><strong>sync_lock</strong> = &lt;unlocked _thread.lock object&gt;</dl>
+
+<dl><dt><strong>total_processes</strong> = None</dl>
+
+<dl><dt><strong>total_processes2</strong> = 0</dl>
+
+<hr>
+Methods inherited from <a href="threading.html#Thread">threading.Thread</a>:<br>
+<dl><dt><a name="Com-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><span class="code">Return&nbsp;repr(self).</span></dd></dl>
+
+<dl><dt><a name="Com-getName"><strong>getName</strong></a>(self)</dt><dd><span class="code">Return&nbsp;a&nbsp;string&nbsp;used&nbsp;for&nbsp;identification&nbsp;purposes&nbsp;only.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;is&nbsp;deprecated,&nbsp;use&nbsp;the&nbsp;name&nbsp;attribute&nbsp;instead.</span></dd></dl>
+
+<dl><dt><a name="Com-isDaemon"><strong>isDaemon</strong></a>(self)</dt><dd><span class="code">Return&nbsp;whether&nbsp;this&nbsp;thread&nbsp;is&nbsp;a&nbsp;daemon.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;is&nbsp;deprecated,&nbsp;use&nbsp;the&nbsp;daemon&nbsp;attribute&nbsp;instead.</span></dd></dl>
+
+<dl><dt><a name="Com-is_alive"><strong>is_alive</strong></a>(self)</dt><dd><span class="code">Return&nbsp;whether&nbsp;the&nbsp;thread&nbsp;is&nbsp;alive.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;returns&nbsp;True&nbsp;just&nbsp;before&nbsp;the&nbsp;<a href="#Com-run">run</a>()&nbsp;method&nbsp;starts&nbsp;until&nbsp;just<br>
+after&nbsp;the&nbsp;<a href="#Com-run">run</a>()&nbsp;method&nbsp;terminates.&nbsp;See&nbsp;also&nbsp;the&nbsp;module&nbsp;function<br>
+enumerate().</span></dd></dl>
+
+<dl><dt><a name="Com-join"><strong>join</strong></a>(self, timeout=None)</dt><dd><span class="code">Wait&nbsp;until&nbsp;the&nbsp;thread&nbsp;terminates.<br>
+&nbsp;<br>
+This&nbsp;blocks&nbsp;the&nbsp;calling&nbsp;thread&nbsp;until&nbsp;the&nbsp;thread&nbsp;whose&nbsp;<a href="#Com-join">join</a>()&nbsp;method&nbsp;is<br>
+called&nbsp;terminates&nbsp;--&nbsp;either&nbsp;normally&nbsp;or&nbsp;through&nbsp;an&nbsp;unhandled&nbsp;exception<br>
+or&nbsp;until&nbsp;the&nbsp;optional&nbsp;timeout&nbsp;occurs.<br>
+&nbsp;<br>
+When&nbsp;the&nbsp;timeout&nbsp;argument&nbsp;is&nbsp;present&nbsp;and&nbsp;not&nbsp;None,&nbsp;it&nbsp;should&nbsp;be&nbsp;a<br>
+floating&nbsp;point&nbsp;number&nbsp;specifying&nbsp;a&nbsp;timeout&nbsp;for&nbsp;the&nbsp;operation&nbsp;in&nbsp;seconds<br>
+(or&nbsp;fractions&nbsp;thereof).&nbsp;As&nbsp;<a href="#Com-join">join</a>()&nbsp;always&nbsp;returns&nbsp;None,&nbsp;you&nbsp;must&nbsp;call<br>
+<a href="#Com-is_alive">is_alive</a>()&nbsp;after&nbsp;<a href="#Com-join">join</a>()&nbsp;to&nbsp;decide&nbsp;whether&nbsp;a&nbsp;timeout&nbsp;happened&nbsp;--&nbsp;if&nbsp;the<br>
+thread&nbsp;is&nbsp;still&nbsp;alive,&nbsp;the&nbsp;<a href="#Com-join">join</a>()&nbsp;call&nbsp;timed&nbsp;out.<br>
+&nbsp;<br>
+When&nbsp;the&nbsp;timeout&nbsp;argument&nbsp;is&nbsp;not&nbsp;present&nbsp;or&nbsp;None,&nbsp;the&nbsp;operation&nbsp;will<br>
+block&nbsp;until&nbsp;the&nbsp;thread&nbsp;terminates.<br>
+&nbsp;<br>
+A&nbsp;thread&nbsp;can&nbsp;be&nbsp;<a href="#Com-join">join</a>()ed&nbsp;many&nbsp;times.<br>
+&nbsp;<br>
+<a href="#Com-join">join</a>()&nbsp;raises&nbsp;a&nbsp;RuntimeError&nbsp;if&nbsp;an&nbsp;attempt&nbsp;is&nbsp;made&nbsp;to&nbsp;join&nbsp;the&nbsp;current<br>
+thread&nbsp;as&nbsp;that&nbsp;would&nbsp;cause&nbsp;a&nbsp;deadlock.&nbsp;It&nbsp;is&nbsp;also&nbsp;an&nbsp;error&nbsp;to&nbsp;<a href="#Com-join">join</a>()&nbsp;a<br>
+thread&nbsp;before&nbsp;it&nbsp;has&nbsp;been&nbsp;started&nbsp;and&nbsp;attempts&nbsp;to&nbsp;do&nbsp;so&nbsp;raises&nbsp;the&nbsp;same<br>
+exception.</span></dd></dl>
+
+<dl><dt><a name="Com-run"><strong>run</strong></a>(self)</dt><dd><span class="code">Method&nbsp;representing&nbsp;the&nbsp;thread's&nbsp;activity.<br>
+&nbsp;<br>
+You&nbsp;may&nbsp;override&nbsp;this&nbsp;method&nbsp;in&nbsp;a&nbsp;subclass.&nbsp;The&nbsp;standard&nbsp;<a href="#Com-run">run</a>()&nbsp;method<br>
+invokes&nbsp;the&nbsp;callable&nbsp;<a href="builtins.html#object">object</a>&nbsp;passed&nbsp;to&nbsp;the&nbsp;<a href="builtins.html#object">object</a>'s&nbsp;constructor&nbsp;as&nbsp;the<br>
+target&nbsp;argument,&nbsp;if&nbsp;any,&nbsp;with&nbsp;sequential&nbsp;and&nbsp;keyword&nbsp;arguments&nbsp;taken<br>
+from&nbsp;the&nbsp;args&nbsp;and&nbsp;kwargs&nbsp;arguments,&nbsp;respectively.</span></dd></dl>
+
+<dl><dt><a name="Com-setDaemon"><strong>setDaemon</strong></a>(self, daemonic)</dt><dd><span class="code">Set&nbsp;whether&nbsp;this&nbsp;thread&nbsp;is&nbsp;a&nbsp;daemon.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;is&nbsp;deprecated,&nbsp;use&nbsp;the&nbsp;.daemon&nbsp;property&nbsp;instead.</span></dd></dl>
+
+<dl><dt><a name="Com-setName"><strong>setName</strong></a>(self, name)</dt><dd><span class="code">Set&nbsp;the&nbsp;name&nbsp;string&nbsp;for&nbsp;this&nbsp;thread.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;is&nbsp;deprecated,&nbsp;use&nbsp;the&nbsp;name&nbsp;attribute&nbsp;instead.</span></dd></dl>
+
+<dl><dt><a name="Com-start"><strong>start</strong></a>(self)</dt><dd><span class="code">Start&nbsp;the&nbsp;thread's&nbsp;activity.<br>
+&nbsp;<br>
+It&nbsp;must&nbsp;be&nbsp;called&nbsp;at&nbsp;most&nbsp;once&nbsp;per&nbsp;thread&nbsp;<a href="builtins.html#object">object</a>.&nbsp;It&nbsp;arranges&nbsp;for&nbsp;the<br>
+<a href="builtins.html#object">object</a>'s&nbsp;<a href="#Com-run">run</a>()&nbsp;method&nbsp;to&nbsp;be&nbsp;invoked&nbsp;in&nbsp;a&nbsp;separate&nbsp;thread&nbsp;of&nbsp;control.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;will&nbsp;raise&nbsp;a&nbsp;RuntimeError&nbsp;if&nbsp;called&nbsp;more&nbsp;than&nbsp;once&nbsp;on&nbsp;the<br>
+same&nbsp;thread&nbsp;<a href="builtins.html#object">object</a>.</span></dd></dl>
+
+<hr>
+Readonly properties inherited from <a href="threading.html#Thread">threading.Thread</a>:<br>
+<dl><dt><strong>ident</strong></dt>
+<dd><span class="code">Thread&nbsp;identifier&nbsp;of&nbsp;this&nbsp;thread&nbsp;or&nbsp;None&nbsp;if&nbsp;it&nbsp;has&nbsp;not&nbsp;been&nbsp;started.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;nonzero&nbsp;integer.&nbsp;See&nbsp;the&nbsp;get_ident()&nbsp;function.&nbsp;Thread<br>
+identifiers&nbsp;may&nbsp;be&nbsp;recycled&nbsp;when&nbsp;a&nbsp;thread&nbsp;exits&nbsp;and&nbsp;another&nbsp;thread&nbsp;is<br>
+created.&nbsp;The&nbsp;identifier&nbsp;is&nbsp;available&nbsp;even&nbsp;after&nbsp;the&nbsp;thread&nbsp;has&nbsp;exited.</span></dd>
+</dl>
+<dl><dt><strong>native_id</strong></dt>
+<dd><span class="code">Native&nbsp;integral&nbsp;thread&nbsp;ID&nbsp;of&nbsp;this&nbsp;thread,&nbsp;or&nbsp;None&nbsp;if&nbsp;it&nbsp;has&nbsp;not&nbsp;been&nbsp;started.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;non-negative&nbsp;integer.&nbsp;See&nbsp;the&nbsp;get_native_id()&nbsp;function.<br>
+This&nbsp;represents&nbsp;the&nbsp;Thread&nbsp;ID&nbsp;as&nbsp;reported&nbsp;by&nbsp;the&nbsp;kernel.</span></dd>
+</dl>
+<hr>
+Data descriptors inherited from <a href="threading.html#Thread">threading.Thread</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+<dl><dt><strong>daemon</strong></dt>
+<dd><span class="code">A&nbsp;boolean&nbsp;value&nbsp;indicating&nbsp;whether&nbsp;this&nbsp;thread&nbsp;is&nbsp;a&nbsp;daemon&nbsp;thread.<br>
+&nbsp;<br>
+This&nbsp;must&nbsp;be&nbsp;set&nbsp;before&nbsp;start()&nbsp;is&nbsp;called,&nbsp;otherwise&nbsp;RuntimeError&nbsp;is<br>
+raised.&nbsp;Its&nbsp;initial&nbsp;value&nbsp;is&nbsp;inherited&nbsp;from&nbsp;the&nbsp;creating&nbsp;thread;&nbsp;the<br>
+main&nbsp;thread&nbsp;is&nbsp;not&nbsp;a&nbsp;daemon&nbsp;thread&nbsp;and&nbsp;therefore&nbsp;all&nbsp;threads&nbsp;created&nbsp;in<br>
+the&nbsp;main&nbsp;thread&nbsp;default&nbsp;to&nbsp;daemon&nbsp;=&nbsp;False.<br>
+&nbsp;<br>
+The&nbsp;entire&nbsp;Python&nbsp;program&nbsp;exits&nbsp;when&nbsp;only&nbsp;daemon&nbsp;threads&nbsp;are&nbsp;left.</span></dd>
+</dl>
+<dl><dt><strong>name</strong></dt>
+<dd><span class="code">A&nbsp;string&nbsp;used&nbsp;for&nbsp;identification&nbsp;purposes&nbsp;only.<br>
+&nbsp;<br>
+It&nbsp;has&nbsp;no&nbsp;semantics.&nbsp;Multiple&nbsp;threads&nbsp;may&nbsp;be&nbsp;given&nbsp;the&nbsp;same&nbsp;name.&nbsp;The<br>
+initial&nbsp;name&nbsp;is&nbsp;set&nbsp;by&nbsp;the&nbsp;constructor.</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Token">class <strong>Token</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Token">Token</a>(from_process=None,&nbsp;to_process=None)<br>
+&nbsp;<br>
+Class&nbsp;representing&nbsp;a&nbsp;token&nbsp;for&nbsp;critical&nbsp;section&nbsp;management.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Token-__init__"><strong>__init__</strong></a>(self, from_process=None, to_process=None)</dt><dd><span class="code">Initializes&nbsp;a&nbsp;new&nbsp;token.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from_process&nbsp;(int,&nbsp;optional):&nbsp;The&nbsp;process&nbsp;sending&nbsp;the&nbsp;token.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to_process&nbsp;(int,&nbsp;optional):&nbsp;The&nbsp;process&nbsp;receiving&nbsp;the&nbsp;token.&nbsp;Defaults&nbsp;to&nbsp;None.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-Lock"><strong>Lock</strong></a> = allocate_lock(...)</dt><dd><span class="code">allocate_lock()&nbsp;-&gt;&nbsp;lock&nbsp;<a href="builtins.html#object">object</a><br>
+(allocate()&nbsp;is&nbsp;an&nbsp;obsolete&nbsp;synonym)<br>
+&nbsp;<br>
+Create&nbsp;a&nbsp;new&nbsp;lock&nbsp;<a href="builtins.html#object">object</a>.&nbsp;See&nbsp;help(type(threading.<a href="#-Lock">Lock</a>()))&nbsp;for<br>
+information&nbsp;about&nbsp;locks.</span></dd></dl>
+ <dl><dt><a name="-sleep"><strong>sleep</strong></a>(...)</dt><dd><span class="code"><a href="#-sleep">sleep</a>(seconds)<br>
+&nbsp;<br>
+Delay&nbsp;execution&nbsp;for&nbsp;a&nbsp;given&nbsp;number&nbsp;of&nbsp;seconds.&nbsp;&nbsp;The&nbsp;argument&nbsp;may&nbsp;be<br>
+a&nbsp;floating&nbsp;point&nbsp;number&nbsp;for&nbsp;subsecond&nbsp;precision.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>PyBus</strong> = &lt;pyeventbus3.Singleton.Singleton object&gt;<br>
+<strong>default_conf</strong> = {'max_threads': 10}<br>
+<strong>exitFlag</strong> = 0</td></tr></table>
+</body></html>
